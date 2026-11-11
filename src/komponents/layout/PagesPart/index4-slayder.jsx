@@ -4,10 +4,10 @@ const Slider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
-    {image: "/images/page4-1.jpg", title:"MEAT & VEGGIES", title2:"OUR MOST POPULAR PLAN"},
-    {image: "/images/page4-2.jpg", title:"VEGGIE", title2:"& PLANT-BASED MEALS"},
-    {image: "/images/page4-3.jpg", title:"FAMILY FRIENDLY", title2:"KID-TESTED RECIPES"},
-    {image: "/images/page4-4.jpg", title:"FIT & WHOLESOME", title2:"FOR A BALANCED LIFESTYLE"},
+    {image: "images/page4-1.jpg", title:"MEAT & VEGGIES", title2:"OUR MOST POPULAR PLAN"},
+    {image: "images/page4-2.jpg", title:"VEGGIE", title2:"& PLANT-BASED MEALS"},
+    {image: "images/page4-3.jpg", title:"FAMILY FRIENDLY", title2:"KID-TESTED RECIPES"},
+    {image: "images/page4-4.jpg", title:"FIT & WHOLESOME", title2:"FOR A BALANCED LIFESTYLE"},
   ];
 
   const nextSlide = () => {
