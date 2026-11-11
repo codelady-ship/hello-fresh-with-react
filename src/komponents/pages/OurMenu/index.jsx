@@ -1,17 +1,12 @@
  
 import React from "react";
-import Header from "../../layout/Header"; // Corrected relative path
-import Footer from "../../layout/Footer"; // Correct relative path for Footer as well
-import RouterPart from "../../RouterPart";
 
+// Header and Footer come from App, so pages render only their own content.
 const OurMenu = () => {
   return (
-    <div>
-      <Header />
-      <RouterPart />
+    <div className="px-8">
       <h2 className="text-gray-700 lg:text-4xl mt-10 mb-2"
       > Our Menu </h2>
-      <Footer />
     </div>
   );
 };

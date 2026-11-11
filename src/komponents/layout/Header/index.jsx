@@ -23,9 +23,9 @@ const Header = () => {
         <div className="flex flex-row justify-between items-center gap-5 px-8 py-8 relative text-lg font-semibold hover:text-gray-800 transition duration-100">
             {/* Logo */}
             <div className="w-1/3">
-            <Link to='Header/index.jsx'>
+            <Link to='/'>
 
-                    <img src="/images/logo.png" alt="logo" className="w-32 sm:w-30" />
+                    <img src="images/logo.png" alt="logo" className="w-32 sm:w-30" />
                 </Link>
             </div>
             

@@ -9,4 +9,3 @@ const Option1 = () => {
 }
 
 export default Option1
-About Our Plans

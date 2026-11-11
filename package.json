@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:pages": "vite build --base=/hello-fresh-with-react/",
     "lint": "eslint .",
     "preview": "vite preview"
   },

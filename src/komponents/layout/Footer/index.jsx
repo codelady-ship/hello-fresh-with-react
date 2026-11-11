@@ -43,9 +43,9 @@ const PagesP1 = () => {
         <div className='flex flex-col items-start gaLink-0 p-5'>
           <p className='font-bold text-center'>Contact us</p>
           <div className='flex gap-2'>
-          <Link className=''> <img src="/images/fb.png" /></Link>
-          <Link ><img src="/images/tviter.png" className='rounded-2xl  bg-blue-500 p-1.5 ' /></Link>
-          <Link ><img src="/images/insta.png " className='rounded-2xl  bg-red-500 p-1.5 ' /></Link>
+          <Link className=''> <img src="images/fb.png" /></Link>
+          <Link ><img src="images/tviter.png" className='rounded-2xl  bg-blue-500 p-1.5 ' /></Link>
+          <Link ><img src="images/insta.png " className='rounded-2xl  bg-red-500 p-1.5 ' /></Link>
           </div>
         </div>
       </div>
