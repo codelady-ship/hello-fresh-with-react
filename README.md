@@ -4,7 +4,7 @@
 
 A multi-page clone of the HelloFresh meal-kit website, built with React, React Router, Vite and Tailwind CSS to practise components, state and routing.
 
-> **Practice clone.** This is a learning project. It is not affiliated with, endorsed by or connected to HelloFresh. Plans, prices and gift cards are examples only and nothing can be ordered.
+> **Practice clone.** This is a learning project. It is not affiliated with, endorsed by or connected to HelloFresh. Plans, prices and gift cards are examples only and nothing can be ordered. The HelloFresh name, logo, icons and recipe photos belong to HelloFresh. The hero, community and "Seared Steak" photos are free stock photos from Unsplash (see [Photo credits](#photo-credits)); the clone shows no photos of real customers or celebrities.
 >
 > 🇦🇿 Təlim layihəsi: HelloFresh saytının React, Vite və Tailwind CSS ilə hazırlanmış çoxsəhifəli klonu.
 
@@ -20,6 +20,20 @@ A multi-page clone of the HelloFresh meal-kit website, built with React, React R
 - **Sustainability:** three topic pages (packaging & recycling, seasonal ingredients, less food waste)
 - Responsive header with a hamburger menu and a Sustainability dropdown (closes on navigation, outside click and Escape)
 - Page titles per route, one `h1` per page, alt text on all images, WebP images, favicon, Open Graph tags, `robots.txt`, `sitemap.xml`
+
+## Photo credits
+
+Free photos from [Unsplash](https://unsplash.com), used under the [Unsplash License](https://unsplash.com/license). They were cropped and converted to WebP.
+
+| File | Photo | Photographer |
+|---|---|---|
+| `public/images/page1.webp` (hero, left bowl) | [Bowl of food on a white table](https://unsplash.com/photos/a-bowl-of-food-on-a-white-table-KwGoCJGwbCs) | [Xavier Chng](https://unsplash.com/@cohesionsingapore) |
+| `public/images/page1.webp` (hero, right bowl) | [Plate of food with meat, vegetables and sauce](https://unsplash.com/photos/a-plate-of-food-with-meat-vegetables-and-sauce-o3Og5MYceTI) | [Xavier Chng](https://unsplash.com/@cohesionsingapore) |
+| `public/images/steak-bowl.webp` | [Black bowl filled with meat and rice](https://unsplash.com/photos/a-black-bowl-filled-with-meat-and-rice-JJWd8lxX5Kk) | Markus Winkler |
+| `public/images/page5-1.webp` | [Person slicing vegetable](https://unsplash.com/photos/person-slicing-vegetable-uB7q7aipU2o) | Jonathan Borba |
+| `public/images/page5-2.webp` | [Person holding black frying pan with cooked food](https://unsplash.com/photos/person-holding-black-frying-pan-with-cooked-food-UjIkvPvfsFY) | Carlos Fernández |
+| `public/images/page5-3.webp` | [People mixing items on bowl](https://unsplash.com/photos/people-mixing-items-on-bowl-XiWtCLWK5K8) | Annie Spratt |
+| `public/images/page5-4.webp` | [Hands arranging fresh cherry tomatoes on a wooden board](https://unsplash.com/photos/hands-arranging-fresh-cherry-tomatoes-on-a-wooden-board-Yy8FETHf8lo) | [Ahmet Koç](https://unsplash.com/@ahmetkoc) |
 
 ## Tech stack
 
@@ -68,4 +82,4 @@ public/images/              images (photos in WebP)
 - How client-side routing interacts with static hosting, and why `HashRouter` avoids 404s on GitHub Pages
 - Configuring Vite's `base` for a sub-path deployment
 - Accessibility basics: `aria-expanded`, labels for form fields, alt text and one `h1` per page
-- Compressing images (the hero image went from 4.9 MB PNG to 140 KB WebP)
+- Compressing images (every photo is a WebP under 200 KB)

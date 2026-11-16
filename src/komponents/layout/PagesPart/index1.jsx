@@ -7,7 +7,7 @@ const PagesP1 = () => {
   return (
     <section
       style={{ backgroundImage: `url(${asset('images/page1.webp')})` }}
-      className="flex min-h-[60vh] flex-col items-center justify-center bg-cover bg-center px-5 pt-24 text-center lg:min-h-[85vh]"
+      className="flex min-h-[60vh] flex-col items-center justify-start bg-[#dbdbdc] bg-contain bg-bottom bg-no-repeat px-5 pt-24 text-center lg:min-h-[85vh] lg:justify-center lg:bg-center"
     >
       <div className="rounded-lg bg-white/80 px-6 py-5 lg:bg-transparent">
         <h1 className="mb-2 text-3xl font-semibold text-gray-700 lg:text-4xl">
