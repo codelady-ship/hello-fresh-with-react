@@ -2,14 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Relative image paths (images/...) resolve from the app root, also on GitHub Pages under /hello-fresh-with-react/ -->
-    <base href="/hello-fresh-with-react/" />
-    <title>Hello fresh</title>
-    <script type="module" crossorigin src="/hello-fresh-with-react/assets/index-BJ19CciU.js"></script>
-    <link rel="stylesheet" crossorigin href="/hello-fresh-with-react/assets/index-m1KCd1SK.css">
+    <title>Redirecting | HelloFresh React Clone</title>
+    <meta name="robots" content="noindex" />
+    <script>
+      // Old links like /hello-fresh-with-react/OurPlans (from the BrowserRouter version)
+      // are sent to the HashRouter URL /hello-fresh-with-react/#/OurPlans.
+      (function () {
+        var base = '/hello-fresh-with-react/';
+        var path = location.pathname.indexOf(base) === 0 ? location.pathname.slice(base.length) : '';
+        location.replace(base + (path ? '#/' + path : ''));
+      })();
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <p><a href="/hello-fresh-with-react/">Go to the HelloFresh React clone</a></p>
   </body>
 </html>
