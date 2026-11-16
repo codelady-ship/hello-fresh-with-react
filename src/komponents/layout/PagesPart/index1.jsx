@@ -1,21 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { asset } from '../../../data/site';
 
+// Hero section (the only h1 on the home page)
 const PagesP1 = () => {
   return (
-    <div 
-      style={{ backgroundImage: 'url(images/page1.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}
-      className=" sx:h-[105rem] lg:h-[100vh] flex flex-col items-center justify-center text-center "
+    <section
+      style={{ backgroundImage: `url(${asset('images/page1.webp')})` }}
+      className="flex min-h-[60vh] flex-col items-center justify-center bg-cover bg-center px-5 pt-24 text-center lg:min-h-[85vh]"
     >
-      <h1 className="text-gray-700 lg:text-4xl mt-10 mb-2">
-        Take the stress <br />
-        out of mealtime
-      </h1>
-      <p className="text-gray-700 lg:text-lg mb-3">America's Most Popular Meal Kit</p>
-      <Link to="/OurPlans" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300 mb-2">
-      <h2>View our plans</h2>  
-      </Link>
-    </div>
+      <div className="rounded-lg bg-white/80 px-6 py-5 lg:bg-transparent">
+        <h1 className="mb-2 text-3xl font-semibold text-gray-700 lg:text-4xl">
+          Take the stress <br />
+          out of mealtime
+        </h1>
+        <p className="mb-4 text-gray-700 lg:text-lg">America's Most Popular Meal Kit</p>
+        <Link to="/OurPlans" className="inline-block rounded bg-green-600 px-6 py-2 font-semibold text-white transition duration-300 hover:bg-green-700">
+          View our plans
+        </Link>
+      </div>
+    </section>
   );
 };
 

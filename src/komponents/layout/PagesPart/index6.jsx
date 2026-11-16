@@ -1,21 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { asset } from '../../../data/site';
 
-const PagesP1 = () => {
+const PagesP6 = () => {
   return (
-    <div 
-      style={{ backgroundImage: 'url(images/page6.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}
-      className=" sx:h-[105rem] lg:h-[30vh] flex flex-col items-center justify-center text-center mt-5 pt-2"
+    <section
+      style={{ backgroundImage: `url(${asset('images/page6.webp')})` }}
+      className="mt-5 flex min-h-[16rem] flex-col items-center justify-center bg-cover bg-center px-5 text-center"
     >
-      <h1 className="text-gray-700 lg:text-4xl mt-10 mb-2">
-      Flexible Plans
-      </h1>
-      <p className="text-gray-700 lg:text-lg mb-3">to meet your household's needs</p>
-      <Link to="/OurPlans" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300 mb-2">
-      <h2>View our plans</h2>  
-      </Link>
-    </div>
+      <div className="rounded-lg bg-white/85 px-6 py-4">
+        <h2 className="mb-1 text-3xl text-gray-700">Flexible Plans</h2>
+        <p className="mb-3 text-gray-700 lg:text-lg">to meet your household's needs</p>
+        <Link to="/OurPlans" className="inline-block rounded bg-green-600 px-6 py-2 font-semibold text-white transition duration-300 hover:bg-green-700">
+          View our plans
+        </Link>
+      </div>
+    </section>
   );
 };
 
-export default PagesP1;
+export default PagesP6;
