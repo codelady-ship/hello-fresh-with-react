@@ -1,338 +1,71 @@
-# React + Vite
+# HelloFresh React Clone (practice project)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![Live demo](https://img.shields.io/badge/live-demo-16a34a?style=for-the-badge)](https://codelady-ship.github.io/hello-fresh-with-react/)
 
-Currently, two official plugins are available:
+A multi-page clone of the HelloFresh meal-kit website, built with React, React Router, Vite and Tailwind CSS to practise components, state and routing.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> **Practice clone.** This is a learning project. It is not affiliated with, endorsed by or connected to HelloFresh. Plans, prices and gift cards are examples only and nothing can be ordered.
+>
+> 🇦🇿 Təlim layihəsi: HelloFresh saytının React, Vite və Tailwind CSS ilə hazırlanmış çoxsəhifəli klonu.
 
-## Expanding the ESLint configuration
+![Screenshot of the home page](docs/screenshot.png)
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Features
 
+- **Home page:** hero, "Why HelloFresh?", box contents, plan carousel with arrow buttons, community photos, FAQ accordion
+- **Our Plans:** choose a plan, number of people and meals per week; the summary calculates an example weekly total
+- **Our Menu:** sample recipes that can be filtered by plan
+- **Gift Cards:** form with a live gift card preview (demo toast instead of a real purchase)
+- **Thanksgiving Box:** seasonal box menu and "how it works" steps
+- **Sustainability:** three topic pages (packaging & recycling, seasonal ingredients, less food waste)
+- Responsive header with a hamburger menu and a Sustainability dropdown (closes on navigation, outside click and Escape)
+- Page titles per route, one `h1` per page, alt text on all images, WebP images, favicon, Open Graph tags, `robots.txt`, `sitemap.xml`
 
-{
-  "menu": [
-    {
-      "id": 1,
-      "title": "Makarna",
-      "ingredients": ["Makarna", "Domates Sosu", "Sarımsak", "Zeytinyağı", "Peynir"],
-      "shapes": [
-        {"image_url": "https://example.com/shape1_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape1_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape1_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape1_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape1_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.5,
-      "category": "hot yemekler",
-      "price": 20.00,
-      "note": "Çok lezzetli ve doyurucu bir seçenek."
-    },
-    {
-      "id": 2,
-      "title": "Fırın Tavuk",
-      "ingredients": ["Tavuk", "Zeytinyağı", "Baharatlar", "Patates"],
-      "shapes": [
-        {"image_url": "https://example.com/shape2_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape2_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape2_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape2_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape2_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.8,
-      "category": "hot yemekler",
-      "price": 35.00,
-      "note": "Fırında yumuşacık ve lezzetli tavuk."
-    },
-    {
-      "id": 3,
-      "title": "Caesar Salata",
-      "ingredients": ["Marulları", "Tavuk", "Parmesan Peyniri", "Caesar Sos"],
-      "shapes": [
-        {"image_url": "https://example.com/shape3_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape3_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape3_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape3_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape3_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.2,
-      "category": "cold yemekler",
-      "price": 15.00,
-      "note": "Taze ve hafif bir salata."
-    },
-    {
-      "id": 4,
-      "title": "Soğuk Ayran",
-      "ingredients": ["Süt", "Yoğurt", "Tuz"],
-      "shapes": [
-        {"image_url": "https://example.com/shape4_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape4_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape4_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape4_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape4_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.7,
-      "category": "drinks",
-      "price": 5.00,
-      "note": "Serinletici ve sağlıklı bir içecek."
-    },
-    {
-      "id": 5,
-      "title": "Buzlu Çay",
-      "ingredients": ["Çay", "Şeker", "Limon"],
-      "shapes": [
-        {"image_url": "https://example.com/shape5_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape5_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape5_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape5_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape5_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.0,
-      "category": "drinks",
-      "price": 4.00,
-      "note": "Buzlu ve ferahlatıcı bir içecek."
-    },
-    {
-      "id": 6,
-      "title": "Pizza Margherita",
-      "ingredients": ["Domates Sosu", "Mozzarella", "Fesleğen", "Zeytinyağı"],
-      "shapes": [
-        {"image_url": "https://example.com/shape6_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape6_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape6_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape6_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape6_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.6,
-      "category": "hot yemekler",
-      "price": 22.00,
-      "note": "İtalyan pizzası, hafif ve lezzetli."
-    },
-    {
-      "id": 7,
-      "title": "Köfte",
-      "ingredients": ["Dana Kıyma", "Soğan", "Baharatlar", "Ekşi Sos"],
-      "shapes": [
-        {"image_url": "https://example.com/shape7_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape7_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape7_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape7_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape7_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.3,
-      "category": "hot yemekler",
-      "price": 18.00,
-      "note": "Ev yapımı, lezzetli köfteler."
-    },
-    {
-      "id": 8,
-      "title": "Kumpir",
-      "ingredients": ["Patates", "Mozzarella", "Zeytin", "Mısır", "Sosis"],
-      "shapes": [
-        {"image_url": "https://example.com/shape8_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape8_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape8_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape8_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape8_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.7,
-      "category": "hot yemekler",
-      "price": 25.00,
-      "note": "Yumuşacık patates, zengin malzemelerle."
-    },
-    {
-      "id": 9,
-      "title": "Börek",
-      "ingredients": ["Yufka", "Beyaz Peynir", "Maydanoz", "Zeytinyağı"],
-      "shapes": [
-        {"image_url": "https://example.com/shape9_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape9_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape9_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape9_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape9_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.4,
-      "category": "hot yemekler",
-      "price": 12.00,
-      "note": "Fırında çıtır çıtır, nefis bir atıştırmalık."
-    },
-    {
-      "id": 10,
-      "title": "Mercimek Çorbası",
-      "ingredients": ["Mercimek", "Soğan", "Havuç", "Zeytinyağı", "Baharatlar"],
-      "shapes": [
-        {"image_url": "https://example.com/shape10_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape10_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape10_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape10_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape10_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.5,
-      "category": "hot yemekler",
-      "price": 10.00,
-      "note": "Vitamin deposu, besleyici çorba."
-    },
-    {
-      "id": 11,
-      "title": "Tavuklu Sandviç",
-      "ingredients": ["Tavuk", "Marul", "Mayonez", "Ekme"],
-      "shapes": [
-        {"image_url": "https://example.com/shape11_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape11_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape11_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape11_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape11_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.6,
-      "category": "hot yemekler",
-      "price": 18.00,
-      "note": "Lezzetli ve doyurucu."
-    },
-    {
-      "id": 12,
-      "title": "Salata",
-      "ingredients": ["Marul", "Domates", "Salatalık", "Zeytinyağı", "Sirkeli Sos"],
-      "shapes": [
-        {"image_url": "https://example.com/shape12_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape12_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape12_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape12_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape12_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.3,
-      "category": "cold yemekler",
-      "price": 10.00,
-      "note": "Taze ve sağlıklı bir başlangıç."
-    },
-    {
-      "id": 13,
-      "title": "Tatlı Çörek",
-      "ingredients": ["Hamur", "Şeker", "Tarçın", "Peynir"],
-      "shapes": [
-        {"image_url": "https://example.com/shape13_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape13_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape13_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape13_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape13_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.7,
-      "category": "hot yemekler",
-      "price": 8.00,
-      "note": "Tatlı krizine birebir."
-    },
-    {
-      "id": 14,
-      "title": "Zeytinyağlı Enginar",
-      "ingredients": ["Enginar", "Zeytinyağı", "Limon", "Baharatlar"],
-      "shapes": [
-        {"image_url": "https://example.com/shape14_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape14_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape14_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape14_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape14_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.8,
-      "category": "cold yemekler",
-      "price": 12.00,
-      "note": "Sağlıklı ve lezzetli."
-    },
-    {
-      "id": 15,
-      "title": "Yoğurtlu Kabak Salatası",
-      "ingredients": ["Kabak", "Yoğurt", "Sarımsak", "Maydanoz"],
-      "shapes": [
-        {"image_url": "https://example.com/shape15_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape15_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape15_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape15_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape15_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.3,
-      "category": "cold yemekler",
-      "price": 14.00,
-      "note": "Hafif ve sağlıklı."
-    },
-    {
-      "id": 16,
-      "title": "Açma",
-      "ingredients": ["Un", "Şeker", "Yumurta", "Mayalı Hamur"],
-      "shapes": [
-        {"image_url": "https://example.com/shape16_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape16_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape16_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape16_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape16_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.5,
-      "category": "hot yemekler",
-      "price": 6.00,
-      "note": "Lezzetli ve yumuşacık."
-    },
-    {
-      "id": 17,
-      "title": "Çikolatalı Kek",
-      "ingredients": ["Un", "Şeker", "Çikolata", "Yumurta"],
-      "shapes": [
-        {"image_url": "https://example.com/shape17_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape17_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape17_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape17_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape17_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.9,
-      "category": "sweet",
-      "price": 9.00,
-      "note": "Tatlı sevenler için mükemmel."
-    },
-    {
-      "id": 18,
-      "title": "Şehriye Çorbası",
-      "ingredients": ["Şehriye", "Tuz", "Su", "Sarımsak"],
-      "shapes": [
-        {"image_url": "https://example.com/shape18_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape18_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape18_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape18_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape18_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.0,
-      "category": "hot yemekler",
-      "price": 7.00,
-      "note": "Kolay ve lezzetli çorba."
-    },
-    {
-      "id": 19,
-      "title": "Fırında Sebze",
-      "ingredients": ["Havuç", "Patates", "Brokoli", "Zeytinyağı", "Baharatlar"],
-      "shapes": [
-        {"image_url": "https://example.com/shape19_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape19_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape19_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape19_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape19_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.2,
-      "category": "hot yemekler",
-      "price": 12.00,
-      "note": "Lezzetli ve sağlıklı."
-    },
-    {
-      "id": 20,
-      "title": "Çılgın Burger",
-      "ingredients": ["Ekmek", "Burger Eti", "Cheddar", "Marul", "Ketçap"],
-      "shapes": [
-        {"image_url": "https://example.com/shape20_1.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape20_2.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape20_3.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape20_4.jpg", "width": 300, "height": 300},
-        {"image_url": "https://example.com/shape20_5.jpg", "width": 300, "height": 300}
-      ],
-      "rating": 4.7,
-      "category": "hot yemekler",
-      "price": 18.00,
-      "note": "Büyük ve doyurucu."
-    }
-  ]
-}
+## Tech stack
+
+React 19, React Router 7 (`HashRouter`), Vite 6, Tailwind CSS 4, ESLint.
+
+## Run locally
+
+```bash
+git clone https://github.com/codelady-ship/hello-fresh-with-react.git
+cd hello-fresh-with-react
+npm install
+npm run dev        # http://localhost:5173/
+npm run build      # production build in dist/ (base: /hello-fresh-with-react/)
+npm run preview    # preview the production build
+```
+
+## Deployment
+
+The site is hosted on GitHub Pages from the `gh-pages` branch.
+
+```bash
+npm run deploy     # = npm run build && npx gh-pages@6 -d dist --nojekyll
+```
+
+- `vite.config.js` sets `base: '/hello-fresh-with-react/'` for builds, so assets resolve under the repository sub-path.
+- Routing uses `HashRouter` (URLs look like `/hello-fresh-with-react/#/OurPlans`). GitHub Pages only serves real files, so with `BrowserRouter` a refresh on `/OurPlans` returned HTTP 404. With the hash, every route loads `index.html` and deep links work.
+- `public/404.html` redirects old links such as `/hello-fresh-with-react/OurPlans` to the matching `#/OurPlans` route.
+
+## Project structure
+
+```
+src/
+  data/site.js              plans, recipes, sustainability topics, asset() helper
+  komponents/
+    layout/                 Header, Footer and the home page sections (PagesPart)
+    pages/                  one folder per route
+    ui/                     shared page header, section, button, hooks (title, toast)
+    RouterPart/             route table
+public/images/              images (photos in WebP)
+```
+
+## What I learned
+
+- Splitting a page into reusable React components and sharing data from one file
+- Managing UI state with `useState` (plan builder, filters, accordion, menus) and side effects with `useEffect`
+- How client-side routing interacts with static hosting, and why `HashRouter` avoids 404s on GitHub Pages
+- Configuring Vite's `base` for a sub-path deployment
+- Accessibility basics: `aria-expanded`, labels for form fields, alt text and one `h1` per page
+- Compressing images (the hero image went from 4.9 MB PNG to 140 KB WebP)

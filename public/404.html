@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting | HelloFresh React Clone</title>
+    <meta name="robots" content="noindex" />
+    <script>
+      // Old links like /hello-fresh-with-react/OurPlans (from the BrowserRouter version)
+      // are sent to the HashRouter URL /hello-fresh-with-react/#/OurPlans.
+      (function () {
+        var base = '/hello-fresh-with-react/';
+        var path = location.pathname.indexOf(base) === 0 ? location.pathname.slice(base.length) : '';
+        location.replace(base + (path ? '#/' + path : ''));
+      })();
+    </script>
+  </head>
+  <body>
+    <p><a href="/hello-fresh-with-react/">Go to the HelloFresh React clone</a></p>
+  </body>
+</html>
