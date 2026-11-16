@@ -1,56 +1,45 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { plans, asset } from '../../../data/site';
 
+// Horizontal carousel: 1 card on phones, 2 on tablets, 4 on desktop.
 const Slider = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const track = useRef(null);
 
-  const slides = [
-    {image: "images/page4-1.jpg", title:"MEAT & VEGGIES", title2:"OUR MOST POPULAR PLAN"},
-    {image: "images/page4-2.jpg", title:"VEGGIE", title2:"& PLANT-BASED MEALS"},
-    {image: "images/page4-3.jpg", title:"FAMILY FRIENDLY", title2:"KID-TESTED RECIPES"},
-    {image: "images/page4-4.jpg", title:"FIT & WHOLESOME", title2:"FOR A BALANCED LIFESTYLE"},
-  ];
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const move = (dir) => {
+    const el = track.current;
+    if (!el) return;
+    const card = el.firstElementChild;
+    const step = card ? card.getBoundingClientRect().width + 20 : el.clientWidth;
+    const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+    const atStart = el.scrollLeft <= 2;
+    if (dir > 0 && atEnd) el.scrollTo({ left: 0, behavior: 'smooth' });
+    else if (dir < 0 && atStart) el.scrollTo({ left: el.scrollWidth, behavior: 'smooth' });
+    else el.scrollBy({ left: dir * step, behavior: 'smooth' });
   };
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
+  const arrow = 'z-10 shrink-0 rounded-full bg-green-600 p-2 text-white shadow hover:bg-green-700';
 
   return (
-    <div className="relative px-5 my-1.5 overflow-hidden">
-      {/* Slider container */}
-      <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-        {slides.map((slide, index) => (
-          <div key={index} className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/4">
-            {/* Display images per row, wrapping in flex */}
-            <div className="flex justify-evenly mb-5">
-              <div className="w-80 mx-10">
-                <img src={slide.image} alt={slide.title} className="w-full h-auto object-cover" />
-                <h2 className="text-xl font-bold mt-3 text-white border-amber-800 bg-green-800 rounded-xl my-1 px-5 lg:absolute top-55 ">{slide.title}</h2>
-                <h3 className="text-sm text-white border-amber-800 bg-amber-600 rounded-xl my-1 px-5 absolute top-65" >{slide.title2}</h3>
-              </div>
-            </div>
-          </div>
+    <div className="mx-auto flex max-w-7xl items-center gap-2 px-2 sm:px-5">
+      <button type="button" onClick={() => move(-1)} className={arrow} aria-label="Previous plans">&#8592;</button>
+      <ul
+        ref={track}
+        className="grid flex-1 snap-x snap-mandatory auto-cols-[100%] grid-flow-col gap-5 overflow-x-auto [scrollbar-width:none] sm:auto-cols-[calc((100%-1.25rem)/2)] lg:auto-cols-[calc((100%-3.75rem)/4)]"
+      >
+        {plans.map((p) => (
+          <li key={p.id} className="relative snap-start overflow-hidden rounded-lg">
+            <Link to="/OurMenu" className="block">
+              <img src={asset(p.image)} alt={p.alt} className="aspect-[5/6] w-full object-cover" loading="lazy" />
+              <span className="absolute bottom-3 left-3 right-3 flex flex-col items-start gap-1">
+                <span className="rounded-xl bg-green-800 px-4 text-lg font-bold uppercase text-white">{p.title}</span>
+                <span className="rounded-xl bg-amber-600 px-4 text-sm uppercase text-white">{p.tagline}</span>
+              </span>
+            </Link>
+          </li>
         ))}
-      </div>
-
-      {/* Left Navigation Button */}
-      <button
-        onClick={prevSlide} 
-        className="absolute left-5 top-1/2 transform -translate-y-1/2 bg-green-400 text-white p-2 rounded-full z-10"
-      >
-        &#8592;
-      </button>
-
-      {/* Right Navigation Button */}
-      <button 
-        onClick={nextSlide} 
-        className="absolute right-5 top-1/2 transform -translate-y-1/2 bg-green-400 text-white p-2 rounded-full z-10"
-      >
-        &#8594;
-      </button>
+      </ul>
+      <button type="button" onClick={() => move(1)} className={arrow} aria-label="Next plans">&#8594;</button>
     </div>
   );
 };

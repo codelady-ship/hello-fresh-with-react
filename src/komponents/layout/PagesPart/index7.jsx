@@ -1,139 +1,45 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const PagesP1 = () => {
-  
+const faqs = [
+  { q: 'How does a meal kit delivery service work?', a: 'You choose a plan and your recipes from the weekly menu. A box with pre-portioned ingredients and step-by-step recipe cards is delivered to your door.' },
+  { q: 'Which meal plans can I try here?', a: 'This clone shows four example plans: Meat & Veggies, Veggie, Family Friendly and Fit & Wholesome. Open "Our Plans" to build one.' },
+  { q: 'Is there nutrition information?', a: 'Yes. Each recipe card in a meal kit lists its nutritional information.' },
+  { q: 'Can I skip a week of delivery?', a: 'Yes. As the "Why HelloFresh?" section says, skipping weeks or cancelling is meant to be easy.' },
+  { q: 'How do I recycle the box?', a: 'See the packaging page for tips on sorting the box, bags and ice packs:', link: { to: '/Sustainability/option1', label: 'Packaging & recycling' } },
+  { q: 'Is this the official HelloFresh website?', a: 'No. This is a practice clone built to learn React. For real plans, prices and delivery areas, visit the official HelloFresh website.' },
+];
+
+const PagesP7 = () => {
   const [activeIndex, setActiveIndex] = useState(null);
-
-  
-  const toggleForAnswer = (index) => {
-   setActiveIndex(activeIndex === index ? null : index);
-  };
+  const toggle = (index) => setActiveIndex(activeIndex === index ? null : index);
 
   return (
-    <div className='bg-gray-100 py-5'>
-      <h2 className='block text-center pt-5 text-3xl text-gray-600'>
-        More questions?
-      </h2>
-      <div className="grid grid-cols-1 gap-5 px-5 py-10">
-        {/* 1 */}
-        <div className='flex flex-col justify-evenly items-center gap-5'>
-          <p
-            className='font-bold text-start bg-amber-300 text-white px-2 py-1 cursor-pointer'
-            onClick={() => toggleForAnswer(0)}
-          >
-            How does HelloFresh’s meal kit delivery service work?
-          </p>
-          <p className={`text-center ${activeIndex === 0 ? 'block' : 'hidden'}`}>
-            Steak, or fish, or plant protein.
-          </p>
-        </div>
-
-        {/* 2 */}
-        <div className='flex flex-col justify-evenly items-center gap-5'>
-          <p
-            className='font-bold text-center bg-orange-900 text-white px-2 py-1 cursor-pointer'
-            onClick={() => toggleForAnswer(1)}
-          >
-            Which food meal plans & recipes does HelloFresh offer?
-          </p>
-          <p className={`text-center ${activeIndex === 1 ? 'block' : 'hidden'}`}>
-            Skipping weeks or cancelling is super easy.
-          </p>
-        </div>
-
-        {/* 3 */}
-        <div className='flex flex-col justify-evenly items-center gap-5'>
-          <p
-            className='font-bold text-center bg-pink-300 text-white px-2 py-1 cursor-pointer'
-            onClick={() => toggleForAnswer(2)}
-          >
-            How many times a week does HelloFresh deliver?
-          </p>
-          <p className={`text-center ${activeIndex === 2 ? 'block' : 'hidden'}`}>
-            Our huge recipe selection wows week after week.
-          </p>
-        </div>
-
-        {/* 4 */}
-        <div className='flex flex-col justify-evenly items-center gap-5'>
-          <p
-            className='font-bold text-center bg-green-900 text-white px-2 py-1 cursor-pointer'
-            onClick={() => toggleForAnswer(3)}
-          >
-            Does HelloFresh give nutrition & calorie information?
-          </p>
-          <p className={`text-center ${activeIndex === 3 ? 'block' : 'hidden'}`}>
-            Chef-created deliciousness from $7.49 per meal.
-          </p>
-        </div>
-
-        {/* 5 */}
-        <div className='flex flex-col justify-evenly items-center gap-5'>
-          <p
-            className='font-bold text-center bg-indigo-500 text-white px-2 py-1 cursor-pointer'
-            onClick={() => toggleForAnswer(4)}
-          >
-            How do I recycle my HelloFresh box?
-          </p>
-          <p className={`text-center ${activeIndex === 4 ? 'block' : 'hidden'}`}>
-            Chef-created deliciousness from $7.49 per meal.
-          </p>
-        </div>
-
-        {/* 6 */}
-        <div className='flex flex-col justify-evenly items-center gap-5'>
-          <p
-            className='font-bold text-center bg-orange-400 text-white px-2 py-1 cursor-pointer'
-            onClick={() => toggleForAnswer(5)}
-          >
-            Why should I choose HelloFresh as my meal kit service?
-          </p>
-          <p className={`text-center ${activeIndex === 5 ? 'block' : 'hidden'}`}>
-            Chef-created deliciousness from $7.49 per meal.
-          </p>
-        </div>
-
-        {/* 7 */}
-        <div className='flex flex-col justify-evenly items-center gap-5'>
-          <p
-            className='font-bold text-center bg-fuchsia-400 text-white px-2 py-1 cursor-pointer'
-            onClick={() => toggleForAnswer(6)}
-          >
-            How much does HelloFresh cost?
-          </p>
-          <p className={`text-center ${activeIndex === 6 ? 'block' : 'hidden'}`}>
-            Chef-created deliciousness from $7.49 per meal.
-          </p>
-        </div>
-
-        {/* 8 */}
-        <div className='flex flex-col justify-evenly items-center gap-5'>
-          <p
-            className='font-bold text-center bg-emerald-400 text-white px-2 py-1 cursor-pointer'
-            onClick={() => toggleForAnswer(7)}
-          >
-            Does HelloFresh support a healthy lifestyle?
-          </p>
-          <p className={`text-center ${activeIndex === 7 ? 'block' : 'hidden'}`}>
-            Chef-created deliciousness from $7.49 per meal.
-          </p>
-        </div>
-
-        {/* 9 */}
-        <div className='flex flex-col justify-evenly items-center gap-5'>
-          <p
-            className='font-bold text-center bg-amber-400 text-white px-2 py-1 cursor-pointer'
-            onClick={() => toggleForAnswer(8)}
-          >
-            Can I skip a week of delivery?
-          </p>
-          <p className={`text-center ${activeIndex === 8 ? 'block' : 'hidden'}`}>
-            Chef-created deliciousness from $7.49 per meal.
-          </p>
-        </div>
-      </div>
-    </div>
+    <section className="bg-gray-100 py-10">
+      <h2 className="pt-5 text-center text-3xl text-gray-600">More questions?</h2>
+      <ul className="mx-auto max-w-3xl space-y-3 px-5 py-8">
+        {faqs.map((f, i) => (
+          <li key={f.q} className="rounded bg-white shadow-sm">
+            <button
+              type="button"
+              id={`faq-q-${i}`}
+              aria-expanded={activeIndex === i}
+              aria-controls={`faq-a-${i}`}
+              onClick={() => toggle(i)}
+              className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left font-bold text-gray-700 hover:text-green-700"
+            >
+              {f.q}
+              <span aria-hidden="true" className="text-green-600">{activeIndex === i ? '−' : '+'}</span>
+            </button>
+            <div id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`} hidden={activeIndex !== i} className="px-4 pb-4 text-gray-600">
+              {f.a}{' '}
+              {f.link && <Link to={f.link.to} className="text-green-700 underline">{f.link.label}</Link>}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 };
 
-export default PagesP1;
+export default PagesP7;

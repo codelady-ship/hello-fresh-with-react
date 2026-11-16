@@ -6,9 +6,11 @@ import PagesP4 from '../../layout/PagesPart/index4';
 import PagesP5 from '../../layout/PagesPart/index5';
 import PagesP6 from '../../layout/PagesPart/index6';
 import PagesP7 from '../../layout/PagesPart/index7';
+import { usePageTitle } from '../../ui/hooks';
 
 // Landing page: all home sections in order.
 const Home = () => {
+  usePageTitle('');
   return (
     <>
       <PagesP1 />

@@ -1,45 +1,31 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { asset } from '../../../data/site';
 
-const PagesP1 = () => {
+const photos = [
+  { img: 'images/page5-1.webp', alt: 'A child helping to cook dinner at the kitchen table', title: 'Little chef', text: 'My little chef helped me make dinner tonight and tried out his new kitchen utensils!' },
+  { img: 'images/page5-2.webp', alt: 'A family smiling at the dinner table', title: 'Family dinner', text: 'Dad and the kids made mom dinner tonight. We had our doubts, but wow, it was tasty!' },
+  { img: 'images/page5-3.webp', alt: 'A boy in a chef hat preparing vegetables', title: 'Helping out', text: 'I’m helping out 🧑🏽‍🍳 #masterchef' },
+  { img: 'images/page5-4.webp', alt: 'A dog watching a meal being cooked in the kitchen', title: 'Cooking class', text: 'We had our weekly cooking class at home and worked as a team. 🙌🏻' },
+];
+
+const PagesP5 = () => {
   return (
-    <div >
-      <h2 className='block text-center pt-5 text-3xl text-gray-600'>
-      Cook it. Love it. Tag it #HelloFreshPics
-      </h2>
-      <p className='block text-center pt-2  text-gray-700 text-xl'>Follow us on Instagram @hellofresh</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 px-5 ">
-        {/* First */}
-        <div className='flex flex-col justify-evenly items-center gap-5 p-5'>
-          <img src="images/page5-1.png"  />
-          <p className='font-bold text-center m-[-30px]'>bdanielle1285</p>
-          <p className='text-center'>My little chef helping me make dinner tonight and trying out some of his new kitchen utensils I got him!</p>
-        </div>
-
-        {/* Second */}
-        <div className='flex flex-col justify-evenly items-center gap-5'>
-          <img src="images/page5-2.png " className='p-4'/>
-          <p className='font-bold text-center m-[-30px]'>lilpepthekelpie</p>
-          <p className='text-center'>I’m helping out 🧑🏽‍🍳 #masterchef #bestboy.</p>
-        </div>
-
-        {/* Third */}
-        <div className='flex flex-col justify-evenly items-center gap-5'>
-          <img src="images/page5-3.png" className='p-5' />
-          <p className='font-bold text-center m-[-30px]'>mandi14eid</p>
-          <p className='text-center'>Drew and the kids made mom dinner tonight! Drew and I had our doubts but WOW was it tasty.</p>
-        </div>
-
-        {/* Fourth */}
-        <div className='flex flex-col justify-evenly items-center gap-5'>
-          <img src="images/page5-4.png" className='p-5'/>
-          <p className='font-bold text-center m-[-30px]'>our_lovely_stride </p>
-          <p className='text-center'>We had a cooking class yesterday and we had such an amazing time. 😁 They had such a great time working as a team and I can’t wait for our weekly cooking class 🙌🏻😁</p>
-        </div>
+    <section className="py-10 text-center">
+      <h2 className="text-3xl text-gray-600">Cook it. Love it. Tag it #HelloFreshPics</h2>
+      <p className="pt-2 text-xl text-gray-700">Photos shared by home cooks</p>
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-5 pt-8 sm:grid-cols-2 lg:grid-cols-4">
+        {photos.map((p) => (
+          <figure key={p.title} className="flex flex-col items-center gap-3">
+            <img src={asset(p.img)} alt={p.alt} width="375" height="469" loading="lazy" className="aspect-square w-full max-w-xs object-cover" />
+            <figcaption>
+              <strong className="block">{p.title}</strong>
+              {p.text}
+            </figcaption>
+          </figure>
+        ))}
       </div>
-      
-    </div>
+    </section>
   );
 };
 
-export default PagesP1;
+export default PagesP5;

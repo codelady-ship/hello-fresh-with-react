@@ -1,12 +1,93 @@
-import React from "react";
+import React, { useState } from 'react';
+import { PageHeader, Section, PracticeNote } from '../../ui';
+import { usePageTitle, useToast } from '../../ui/hooks';
+import { asset } from '../../../data/site';
 
-// Header and Footer come from App, so pages render only their own content.
+const amounts = [25, 50, 75, 100];
+
 const GiftCards = () => {
+  usePageTitle('Gift Cards');
+  const [amount, setAmount] = useState(50);
+  const [to, setTo] = useState('');
+  const [from, setFrom] = useState('');
+  const [message, setMessage] = useState('Enjoy some delicious dinners on me!');
+  const [toast, showToast] = useToast();
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    showToast(`Demo only: the $${amount} gift card for ${to} was not really sent.`);
+  };
+
+  const input = 'w-full rounded border border-gray-300 px-3 py-2 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200';
+
   return (
-    <div className="px-8">
-      <h2 className="text-gray-700 lg:text-4xl mt-10 mb-2"
-      >About Gift Cards</h2>
-    </div>
+    <>
+      <PageHeader
+        eyebrow="Gift Cards"
+        title="Give the gift of home cooking"
+        intro="Pick an amount, add a personal message and see a preview of your digital gift card."
+      />
+
+      <Section>
+        <div className="grid gap-10 md:grid-cols-2">
+          <form onSubmit={onSubmit} className="space-y-5">
+            <fieldset>
+              <legend className="mb-2 font-bold text-gray-700">Amount</legend>
+              <div className="flex flex-wrap gap-3">
+                {amounts.map((a) => (
+                  <button
+                    key={a}
+                    type="button"
+                    aria-pressed={amount === a}
+                    onClick={() => setAmount(a)}
+                    className={`rounded border px-4 py-2 font-semibold transition ${amount === a ? 'border-green-600 bg-green-600 text-white' : 'border-gray-300 text-gray-700 hover:border-green-600'}`}
+                  >
+                    ${a}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+            <div>
+              <label htmlFor="gc-to" className="mb-1 block font-bold text-gray-700">Recipient's name</label>
+              <input id="gc-to" className={input} value={to} onChange={(e) => setTo(e.target.value)} required maxLength={40} />
+            </div>
+            <div>
+              <label htmlFor="gc-from" className="mb-1 block font-bold text-gray-700">Your name</label>
+              <input id="gc-from" className={input} value={from} onChange={(e) => setFrom(e.target.value)} required maxLength={40} />
+            </div>
+            <div>
+              <label htmlFor="gc-msg" className="mb-1 block font-bold text-gray-700">Message</label>
+              <textarea id="gc-msg" rows={3} className={input} value={message} onChange={(e) => setMessage(e.target.value)} maxLength={140} />
+            </div>
+            <button type="submit" className="w-full rounded bg-green-600 py-3 font-semibold text-white transition hover:bg-green-700">
+              Send gift card
+            </button>
+          </form>
+
+          <div aria-live="polite">
+            <h2 className="mb-3 font-bold text-gray-700">Preview</h2>
+            <div className="overflow-hidden rounded-xl bg-green-700 text-white shadow-lg">
+              <div className="flex items-center justify-between bg-white px-5 py-3">
+                <img src={asset('images/logo.png')} alt="HelloFresh logo" className="w-24" />
+                <span className="text-2xl font-bold text-green-700">${amount}</span>
+              </div>
+              <div className="space-y-3 p-6">
+                <p className="text-lg">To: <strong>{to || 'Recipient'}</strong></p>
+                <p className="italic">“{message || 'Your message'}”</p>
+                <p>From: <strong>{from || 'You'}</strong></p>
+              </div>
+            </div>
+            <ul className="mt-6 space-y-2 text-gray-600">
+              <li>✓ Sent by email as a digital card</li>
+              <li>✓ Can be used on any plan</li>
+              <li>✓ A thoughtful gift for birthdays, new parents and busy friends</li>
+            </ul>
+          </div>
+        </div>
+      </Section>
+      <PracticeNote />
+      {toast}
+    </>
   );
 };
 

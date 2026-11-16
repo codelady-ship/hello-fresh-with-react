@@ -1,17 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Slider from "./index4-slayder"
-const PagesP1 = () => {
+import Slider from './index4-slayder';
+
+const PagesP4 = () => {
   return (
-    <div className="">
-       <h2 className='block text-center py-5 text-2xl text-gray-600'>Over 30+ fresh recipes every week</h2>
-       <p className='block text-center py-5  text-gray-700 text-xl'>Easy meals designed by professional chefs and nutritionists</p>
-       <Slider/>
-      <Link to="/OurPlans" className="bg- white text-green-500 py-2 px-8 rounded  border -green-500 hover:bg-green-800 transition duration-300  ml-[45%] mt-15 ">
-        Get started
+    <section className="py-10 text-center">
+      <h2 className="py-3 text-3xl text-gray-600">Over 30+ fresh recipes every week</h2>
+      <p className="pb-6 text-xl text-gray-700">Easy meals designed by professional chefs and nutritionists</p>
+      <Slider />
+      <Link to="/OurMenu" className="mt-8 inline-block rounded border border-green-600 px-8 py-2 font-semibold text-green-700 transition duration-300 hover:bg-green-600 hover:text-white">
+        View our menu
       </Link>
-    </div>
+    </section>
   );
 };
 
-export default PagesP1;
+export default PagesP4;
