@@ -15,7 +15,7 @@ export const recipes = [
   { id: 2, title: 'Glazed Steak with Mash & Green Beans', plan: 'meat-veggies', time: 35, tags: ['High protein'], image: 'images/page4-2.jpg', alt: 'Glazed steak slices next to mashed potatoes and green beans' },
   { id: 3, title: 'Crunchy Carrot Lettuce Wraps', plan: 'family', time: 25, tags: ['Kid-friendly', 'Quick'], image: 'images/page4-3.jpg', alt: 'Lettuce leaves filled with shredded carrot and herbs' },
   { id: 4, title: 'Classic Burger with Potato Wedges', plan: 'family', time: 40, tags: ['Kid-friendly'], image: 'images/page4-4.jpg', alt: 'Burger with lettuce and tomato beside roasted potato wedges' },
-  { id: 5, title: 'Seared Steak & Herby Grain Bowl', plan: 'fit', time: 30, tags: ['High protein', 'Balanced'], image: 'images/page1.webp', alt: 'Sliced steak with a herb sauce on a bowl of grains', position: '85% 40%' },
+  { id: 5, title: 'Seared Steak & Herby Grain Bowl', plan: 'fit', time: 30, tags: ['High protein', 'Balanced'], image: 'images/steak-bowl.webp', alt: 'Sliced seared steak over rice with spring onions and crispy shallots in a black bowl' },
   { id: 6, title: 'Loaded Tacos & Cheesy Bake', plan: 'meat-veggies', time: 45, tags: ['Sharing'], image: 'images/page6.webp', alt: 'Tacos, rice and a cheesy oven bake on a table', position: '30% 50%' },
 ];
 
