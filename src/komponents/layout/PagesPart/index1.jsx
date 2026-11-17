@@ -14,8 +14,8 @@ const PagesP1 = () => {
           Take the stress <br />
           out of mealtime
         </h1>
-        <p className="mb-4 text-gray-700 lg:text-lg">America's Most Popular Meal Kit</p>
-        <Link to="/OurPlans" className="inline-block rounded bg-green-600 px-6 py-2 font-semibold text-white transition duration-300 hover:bg-green-700">
+        <p className="mb-4 text-gray-700 lg:text-lg">A React practice clone of a meal kit</p>
+        <Link to="/OurPlans" className="inline-flex min-h-11 items-center rounded bg-green-600 px-6 py-2 font-semibold text-white transition duration-300 hover:bg-green-700">
           View our plans
         </Link>
       </div>

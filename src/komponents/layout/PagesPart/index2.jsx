@@ -22,7 +22,7 @@ const PagesP2 = () => {
           </div>
         ))}
       </div>
-      <Link to="/OurPlans" className="inline-block rounded bg-green-600 px-8 py-2 font-semibold text-white transition duration-300 hover:bg-green-700">
+      <Link to="/OurPlans" className="inline-flex min-h-11 items-center rounded bg-green-600 px-8 py-2 font-semibold text-white transition duration-300 hover:bg-green-700">
         Get started
       </Link>
     </section>

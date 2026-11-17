@@ -5,8 +5,8 @@ import { usePageTitle } from '../../ui/hooks';
 import { topics } from '../../../data/site';
 
 // Shared layout for the three sustainability pages.
-const SustainabilityPage = ({ title, intro, points, tip }) => {
-  usePageTitle(title);
+const SustainabilityPage = ({ title, intro, points, tip, description }) => {
+  usePageTitle(title, description);
   return (
     <>
       <PageHeader eyebrow="Sustainability" title={title} intro={intro}>
@@ -16,7 +16,7 @@ const SustainabilityPage = ({ title, intro, points, tip }) => {
               key={t.path}
               to={t.path}
               className={({ isActive }) =>
-                `rounded-full border px-4 py-1.5 font-semibold transition ${isActive ? 'border-green-600 bg-green-600 text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-green-600'}`
+                `inline-flex min-h-11 items-center rounded-full border px-4 py-1.5 font-semibold transition ${isActive ? 'border-green-600 bg-green-600 text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-green-600'}`
               }
             >
               {t.title}

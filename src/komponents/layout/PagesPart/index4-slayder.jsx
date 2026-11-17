@@ -13,12 +13,13 @@ const Slider = () => {
     const step = card ? card.getBoundingClientRect().width + 20 : el.clientWidth;
     const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
     const atStart = el.scrollLeft <= 2;
-    if (dir > 0 && atEnd) el.scrollTo({ left: 0, behavior: 'smooth' });
-    else if (dir < 0 && atStart) el.scrollTo({ left: el.scrollWidth, behavior: 'smooth' });
-    else el.scrollBy({ left: dir * step, behavior: 'smooth' });
+    const behavior = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    if (dir > 0 && atEnd) el.scrollTo({ left: 0, behavior });
+    else if (dir < 0 && atStart) el.scrollTo({ left: el.scrollWidth, behavior });
+    else el.scrollBy({ left: dir * step, behavior });
   };
 
-  const arrow = 'z-10 shrink-0 rounded-full bg-green-600 p-2 text-white shadow hover:bg-green-700';
+  const arrow = 'z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-green-600 text-white shadow hover:bg-green-700';
 
   return (
     <div className="mx-auto flex max-w-7xl items-center gap-2 px-2 sm:px-5">
@@ -29,8 +30,8 @@ const Slider = () => {
       >
         {plans.map((p) => (
           <li key={p.id} className="relative snap-start overflow-hidden rounded-lg">
-            <Link to="/OurMenu" className="block">
-              <img src={asset(p.image)} alt={p.alt} className="aspect-[5/6] w-full object-cover" loading="lazy" />
+            <Link to="/OurMenu" state={{ plan: p.id }} className="block">
+              <img src={asset(p.image)} alt={p.alt} width="640" height="769" className="aspect-[5/6] w-full object-cover" loading="lazy" />
               <span className="absolute bottom-3 left-3 right-3 flex flex-col items-start gap-1">
                 <span className="rounded-xl bg-green-800 px-4 text-lg font-bold uppercase text-white">{p.title}</span>
                 <span className="rounded-xl bg-amber-600 px-4 text-sm uppercase text-white">{p.tagline}</span>

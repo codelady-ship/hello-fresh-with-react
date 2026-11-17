@@ -16,7 +16,7 @@ const steps = [
 ];
 
 const ThanksgivingBoxs = () => {
-  usePageTitle('Thanksgiving Box');
+  usePageTitle('Thanksgiving Box', 'An example Thanksgiving meal-kit box in this HelloFresh practice clone: turkey, gravy, stuffing, sides and pie with a step-by-step cooking timeline.');
   return (
     <>
       <PageHeader
