@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { PageHeader, Section, ButtonLink, PracticeNote } from '../../ui';
 import { usePageTitle } from '../../ui/hooks';
-import { plans, recipes, asset } from '../../../data/site';
+import { asset } from '../../../data/site';
+import { useCatalog } from '../../../api';
 
 const OurMenu = () => {
   usePageTitle('Our Menu');
   const [filter, setFilter] = useState('all');
+  const { plans, recipes } = useCatalog();
   const shown = filter === 'all' ? recipes : recipes.filter((r) => r.plan === filter);
   const filters = [{ id: 'all', title: 'All recipes' }, ...plans];
 

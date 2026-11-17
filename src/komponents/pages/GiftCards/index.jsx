@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PageHeader, Section, PracticeNote } from '../../ui';
 import { usePageTitle, useToast } from '../../ui/hooks';
 import { asset } from '../../../data/site';
+import { apiRequest } from '../../../api';
 
 const amounts = [25, 50, 75, 100];
 
@@ -13,9 +14,23 @@ const GiftCards = () => {
   const [message, setMessage] = useState('Enjoy some delicious dinners on me!');
   const [toast, showToast] = useToast();
 
-  const onSubmit = (e) => {
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
+
+  const onSubmit = async (e) => {
     e.preventDefault();
-    showToast(`Demo only: the $${amount} gift card for ${to} was not really sent.`);
+    if (!to.trim() || !from.trim()) return setError("Please enter the recipient's name and your name.");
+    setError('');
+    setSending(true);
+    try {
+      const card = await apiRequest('/api/gift-cards', { amount, to: to.trim(), from: from.trim(), message: message.trim() });
+      showToast(`Demo gift card ${card.code} ($${card.amount}) for ${card.to} is ready – no payment was taken. It can be redeemed on the Our Plans page.`);
+    } catch (err) {
+      if (err.offline) showToast(`Demo only: the $${amount} gift card for ${to} was not really sent.`);
+      else setError(err.message);
+    } finally {
+      setSending(false);
+    }
   };
 
   const input = 'w-full rounded border border-gray-300 px-3 py-2 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200';
@@ -59,8 +74,9 @@ const GiftCards = () => {
               <label htmlFor="gc-msg" className="mb-1 block font-bold text-gray-700">Message</label>
               <textarea id="gc-msg" rows={3} className={input} value={message} onChange={(e) => setMessage(e.target.value)} maxLength={140} />
             </div>
-            <button type="submit" className="w-full rounded bg-green-600 py-3 font-semibold text-white transition hover:bg-green-700">
-              Send gift card
+            {error && <p className="text-sm text-red-700" role="alert">{error}</p>}
+            <button type="submit" disabled={sending} className="w-full rounded bg-green-600 py-3 font-semibold text-white transition hover:bg-green-700 disabled:opacity-60">
+              {sending ? 'Sending…' : 'Send gift card'}
             </button>
           </form>
 

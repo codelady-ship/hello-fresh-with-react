@@ -7,7 +7,7 @@ export const usePageTitle = (title) => {
   }, [title]);
 };
 
-// Small notice shown after demo actions (no backend in this practice project).
+// Small notice shown after form actions (API result, or a demo note when the API is offline).
 export const useToast = () => {
   const [message, setMessage] = useState('');
   useEffect(() => {
