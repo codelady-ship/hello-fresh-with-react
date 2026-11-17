@@ -1,0 +1,21 @@
+# HelloFresh React Clone (practice project)
+
+> A learning project by Antiqa (GitHub: codelady-ship): a React 19 + Vite + Tailwind CSS clone of a meal-kit website, built to practise components, routing and forms. It is not the official HelloFresh website and is not affiliated with HelloFresh. Plans, prices and gift cards are examples; forms run in demo mode and nothing is ordered, sent or charged.
+
+Live site: https://codelady-ship.github.io/hello-fresh-with-react/
+Source code: https://github.com/codelady-ship/hello-fresh-with-react
+
+## Pages (single-page app, hash routes)
+
+- [Home](https://codelady-ship.github.io/hello-fresh-with-react/): hero, why choose a meal kit, what is inside the box, plan carousel, cooking photos, FAQ
+- [Our Plans](https://codelady-ship.github.io/hello-fresh-with-react/#/OurPlans): demo plan builder (recipe style, 2 or 4 people, 2 to 5 meals a week, example weekly price, demo confirmation, gift card redeem)
+- [Our Menu](https://codelady-ship.github.io/hello-fresh-with-react/#/OurMenu): sample weekly recipes filterable by plan
+- [Gift Cards](https://codelady-ship.github.io/hello-fresh-with-react/#/GiftCards): demo gift card designer with live preview and a code that can be redeemed on Our Plans
+- [Thanksgiving Box](https://codelady-ship.github.io/hello-fresh-with-react/#/ThanksgivingBoxs): example holiday menu and how it works
+- [Packaging & recycling](https://codelady-ship.github.io/hello-fresh-with-react/#/Sustainability/option1)
+- [Seasonal ingredients](https://codelady-ship.github.io/hello-fresh-with-react/#/Sustainability/option2)
+- [Less food waste](https://codelady-ship.github.io/hello-fresh-with-react/#/Sustainability/option3)
+
+## Tech
+
+React 19, React Router 7 (HashRouter for GitHub Pages), Tailwind CSS 4, Vite 6. Optional Express + MongoDB API in backend/; without it the site uses bundled data and demo mode.
