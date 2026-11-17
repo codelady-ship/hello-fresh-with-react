@@ -46,6 +46,7 @@ const giftCardSchema = new mongoose.Schema(
     to: { type: String, required: true, trim: true, maxlength: 40 },
     from: { type: String, required: true, trim: true, maxlength: 40 },
     message: { type: String, trim: true, maxlength: 140, default: "" },
+    demo: { type: Boolean, default: true }, // no payment in this practice project
   },
   opts
 );

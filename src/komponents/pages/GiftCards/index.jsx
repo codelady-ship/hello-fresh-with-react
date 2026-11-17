@@ -24,7 +24,7 @@ const GiftCards = () => {
     setSending(true);
     try {
       const card = await apiRequest('/api/gift-cards', { amount, to: to.trim(), from: from.trim(), message: message.trim() });
-      showToast(`Gift card ${card.code} ($${card.amount}) for ${card.to} is ready. It can be redeemed on the Our Plans page.`);
+      showToast(`Demo gift card ${card.code} ($${card.amount}) for ${card.to} is ready – no payment was taken. It can be redeemed on the Our Plans page.`);
     } catch (err) {
       if (err.offline) showToast(`Demo only: the $${amount} gift card for ${to} was not really sent.`);
       else setError(err.message);

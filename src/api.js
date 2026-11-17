@@ -2,15 +2,19 @@ import { useEffect, useState } from 'react';
 import { plans as localPlans, recipes as localRecipes } from './data/site';
 
 // Client for the Express + MongoDB API in backend/.
-// The URL comes from VITE_API_URL (build time, see .env.production) or ?api=<url> for testing.
+// The URL comes from VITE_API_URL (build time, see .env.production); ?api=<url> works on localhost only.
 // Without a URL, or when the API does not answer within 8 s, the pages use the bundled
 // data in src/data/site.js and the forms run in demo mode.
 const TIMEOUT_MS = 8000;
 
+// ?api=<url> is honoured ONLY when the page itself runs on localhost: on the live site a
+// crafted link must not be able to send visitors' names and emails to another server.
 const readApiUrl = () => {
   let fromQuery = null;
   try {
-    fromQuery = new URLSearchParams(window.location.search).get('api');
+    if (['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname)) {
+      fromQuery = new URLSearchParams(window.location.search).get('api');
+    }
   } catch {
     // no window
   }

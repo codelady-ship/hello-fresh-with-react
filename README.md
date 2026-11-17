@@ -13,9 +13,9 @@ A multi-page clone of the HelloFresh meal-kit website, built with React, React R
 ## Features
 
 - **Home page:** hero, "Why HelloFresh?", box contents, plan carousel with arrow buttons, community photos, FAQ accordion
-- **Our Plans:** choose a plan, number of people and meals per week; the summary calculates the weekly total. With the API online, **"Select this plan" saves a subscription** (name, email, optional gift card code). The server recalculates the price and returns a reference like `HF-3F9A1C`
+- **Our Plans:** choose a plan, number of people and meals per week; the summary calculates the weekly total. With the API online, **"Select this plan" saves a subscription** (name, email, optional gift card code). The server recalculates the price and returns a reference like `HF-3F9A1C`. The subscription is created first and the gift card is debited atomically afterwards; if the balance was already spent, the subscription is rolled back
 - **Our Menu:** recipes loaded from the API (bundled copy offline) and filtered by plan
-- **Gift Cards:** form with a live gift card preview. With the API online it **creates a gift card code** (e.g. `GIFT-1A2B3C4D`) that can be redeemed on the first box in Our Plans
+- **Gift Cards:** form with a live gift card preview. With the API online it **creates a demo gift card code** (e.g. `GIFT-1A2B3C4D`) that can be redeemed on the first box in Our Plans. There is no payment step in this practice project, so every card is marked `demo: true`; a real shop would only create a card after a successful payment
 - **Thanksgiving Box:** seasonal box menu and "how it works" steps
 - **Sustainability:** three topic pages (packaging & recycling, seasonal ingredients, less food waste)
 - Responsive header with a hamburger menu and a Sustainability dropdown (closes on navigation, outside click and Escape)
@@ -52,7 +52,7 @@ Free photos from [Unsplash](https://unsplash.com), used under the [Unsplash Lice
 | GET | `/api/recipes/:slug` | public | One recipe |
 | POST | `/api/subscriptions` | public (rate limited) | `{ plan, people, meals, name, email, giftCode? }` → `201 { reference, weeklyTotal, giftApplied, firstBoxTotal, ... }` |
 | POST | `/api/gift-cards` | public (rate limited) | `{ amount: 25|50|75|100, to, from, message }` → `201 { code, amount }` |
-| GET | `/api/gift-cards/:code` | public | Amount and remaining balance |
+| GET | `/api/gift-cards/:code` | public (rate limited) | Amount and remaining balance |
 | POST | `/api/auth/login` | public (rate limited) | `{ email, password }` → `{ token }` |
 | GET / POST / PUT / DELETE | `/api/admin/plans[/:slug]`, `/api/admin/recipes[/:slug]` | admin | Manage the catalogue |
 | GET / PATCH | `/api/admin/subscriptions[/:reference]` | admin | List subscriptions, change status |
@@ -81,7 +81,7 @@ npm run dev            # http://localhost:4000, empty collections are seeded fro
 npm test               # API tests on an in-memory MongoDB
 ```
 
-Open the frontend with `?api=`, e.g. `http://localhost:5173/?api=http://localhost:4000#/OurPlans`.
+Open the frontend with `?api=` (honoured only on `localhost`/`127.0.0.1`, so a crafted link cannot redirect the live forms), e.g. `http://localhost:5173/?api=http://localhost:4000#/OurPlans`.
 
 ## Deployment
 

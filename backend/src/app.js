@@ -100,16 +100,27 @@ function createApp() {
     res.json(withSlugId(doc));
   });
 
-  /* ----- Gift cards ----- */
+  /* ----- Gift cards -----
+     DEMO: this practice project has no payment step, so every gift card created here is a
+     demo card (demo: true) worth nothing outside this site. A real shop would create the
+     card only after a successful payment. */
   api.post("/gift-cards", publicWriteLimiter(), validate(giftSchema), async (req, res) => {
-    const card = await GiftCard.create({ ...req.body, balance: req.body.amount, code: code("GIFT", 4) });
-    res.status(201).json({ code: card.code, amount: card.amount, to: card.to, from: card.from });
+    let card;
+    for (let attempt = 0; !card; attempt++) {
+      try {
+        card = await GiftCard.create({ ...req.body, balance: req.body.amount, code: code("GIFT", 4), demo: true });
+      } catch (err) {
+        if (err.code !== 11000 || attempt >= 2) throw err; // retry a code collision
+      }
+    }
+    res.status(201).json({ code: card.code, amount: card.amount, to: card.to, from: card.from, demo: true });
   });
 
-  api.get("/gift-cards/:code", async (req, res) => {
+  // Balance lookup is rate limited so codes cannot be guessed by brute force.
+  api.get("/gift-cards/:code", publicWriteLimiter(Number(process.env.LOOKUP_RATE_LIMIT) || 30), async (req, res) => {
     const card = await GiftCard.findOne({ code: String(req.params.code).toUpperCase() });
     if (!card) throw new HttpError(404, "Gift card not found");
-    res.json({ code: card.code, amount: card.amount, balance: card.balance });
+    res.json({ code: card.code, amount: card.amount, balance: card.balance, demo: card.demo });
   });
 
   /* ----- Plan subscriptions (price is always calculated here) ----- */
@@ -121,30 +132,46 @@ function createApp() {
     const weeklyTotal = round2(servings * plan.pricePerServing);
 
     let giftApplied = 0;
+    let card = null;
     if (s.giftCode) {
-      // atomic: take what the card still has, up to the first box total
-      const card = await GiftCard.findOne({ code: s.giftCode });
+      card = await GiftCard.findOne({ code: s.giftCode });
       if (!card || card.balance <= 0) throw fail("giftCode", "Gift card not found or already used");
       giftApplied = round2(Math.min(card.balance, weeklyTotal));
-      const updated = await GiftCard.findOneAndUpdate({ _id: card._id, balance: { $gte: giftApplied } }, { $inc: { balance: -giftApplied } }, { new: true });
-      if (!updated) throw fail("giftCode", "Gift card balance changed, please try again");
     }
 
-    const sub = await Subscription.create({
-      reference: code("HF"),
-      plan: plan.slug,
-      planTitle: plan.title,
-      people: s.people,
-      meals: s.meals,
-      servings,
-      pricePerServing: plan.pricePerServing,
-      weeklyTotal,
-      giftCode: s.giftCode,
-      giftApplied,
-      firstBoxTotal: round2(weeklyTotal - giftApplied),
-      name: s.name,
-      email: s.email,
-    });
+    // 1) Create the subscription first (a reference collision is retried) ...
+    let sub;
+    for (let attempt = 0; !sub; attempt++) {
+      try {
+        sub = await Subscription.create({
+          reference: code("HF"),
+          plan: plan.slug,
+          planTitle: plan.title,
+          people: s.people,
+          meals: s.meals,
+          servings,
+          pricePerServing: plan.pricePerServing,
+          weeklyTotal,
+          giftCode: s.giftCode,
+          giftApplied,
+          firstBoxTotal: round2(weeklyTotal - giftApplied),
+          name: s.name,
+          email: s.email,
+        });
+      } catch (err) {
+        if (err.code !== 11000 || attempt >= 2) throw err;
+      }
+    }
+
+    // 2) ... then debit the card atomically. If the balance was spent in the meantime, the
+    // subscription is removed again, so neither a card nor a subscription is left half done.
+    if (card) {
+      const debited = await GiftCard.findOneAndUpdate({ _id: card._id, balance: { $gte: giftApplied } }, { $inc: { balance: -giftApplied } });
+      if (!debited) {
+        await Subscription.deleteOne({ _id: sub._id });
+        throw fail("giftCode", "Gift card balance changed, please try again");
+      }
+    }
     res.status(201).json({
       reference: sub.reference,
       planTitle: sub.planTitle,

@@ -5,12 +5,15 @@ const assert = require("node:assert/strict");
 process.env.JWT_SECRET = "test-secret";
 process.env.ADMIN_EMAIL = "admin@test.local";
 process.env.ADMIN_PASSWORD = "test-password";
+process.env.PUBLIC_RATE_LIMIT = "200";
+process.env.LOOKUP_RATE_LIMIT = "6";
 
 const mongoose = require("mongoose");
 const request = require("supertest");
 const { MongoMemoryServer } = require("mongodb-memory-server-core");
 const { createApp } = require("../src/app");
 const { seed } = require("../src/seed");
+const { ensureIndexes } = require("../src/lib/db");
 
 let mongo;
 let app;
@@ -20,6 +23,7 @@ let reference;
 before(async () => {
   mongo = await MongoMemoryServer.create();
   await mongoose.connect(mongo.getUri("hf-test"));
+  await ensureIndexes();
   await seed();
   app = createApp();
 });
@@ -48,6 +52,7 @@ test("gift card: create and check balance", async () => {
   assert.equal(res.status, 201);
   assert.match(res.body.code, /^GIFT-[0-9A-F]{8}$/);
   giftCode = res.body.code;
+  assert.equal(res.body.demo, true);
   assert.equal((await request(app).get(`/api/gift-cards/${giftCode.toLowerCase()}`)).body.balance, 25);
   const bad = await request(app).post("/api/gift-cards").send({ amount: 30, to: "", from: "A" });
   assert.equal(bad.status, 400);
@@ -72,6 +77,27 @@ test("subscription: server price and gift card redemption", async () => {
   assert.equal(used.body.details[0].field, "giftCode");
 });
 
+test("subscription: parallel redemptions of one card -> one discount, no orphan subscription", async () => {
+  const card = (await request(app).post("/api/gift-cards").send({ amount: 50, to: "Leyla", from: "Murad" })).body;
+  const body = (i) => ({ plan: "veggie", people: 2, meals: 4, name: "Paralel " + i, email: `p${i}@example.com`, giftCode: card.code });
+  const results = await Promise.all(Array.from({ length: 6 }, (_, i) => request(app).post("/api/subscriptions").send(body(i))));
+  const ok = results.filter((r) => r.status === 201);
+  // 2 x 4 x 7.49 = 59.92 > 50, so the whole card goes to exactly one subscription
+  assert.equal(ok.length, 1, results.map((r) => r.status).join(","));
+  assert.equal(ok[0].body.giftApplied, 50);
+  assert.ok(results.filter((r) => r.status !== 201).every((r) => r.status === 400 && r.body.details[0].field === "giftCode"));
+  const login = await request(app).post("/api/auth/login").send({ email: "admin@test.local", password: "test-password" });
+  const subs = (await request(app).get("/api/admin/subscriptions").set("Authorization", `Bearer ${login.body.token}`)).body;
+  assert.equal(subs.filter((x) => x.name.startsWith("Paralel")).length, 1); // losers were rolled back
+  assert.equal((await request(app).get(`/api/gift-cards/${card.code}`)).body.balance, 0);
+});
+
+test("gift card lookup is rate limited", async () => {
+  let last;
+  for (let i = 0; i < 8; i++) last = await request(app).get("/api/gift-cards/GIFT-00000000");
+  assert.equal(last.status, 429);
+});
+
 test("subscription: validation", async () => {
   const bad = await request(app).post("/api/subscriptions").send({ plan: "veggie", people: 3, meals: 7, name: "", email: "nope" });
   assert.equal(bad.status, 400);
@@ -86,8 +112,8 @@ test("admin: auth, subscriptions and catalogue CRUD", async () => {
   const auth = { Authorization: `Bearer ${login.body.token}` };
 
   const subs = (await request(app).get("/api/admin/subscriptions").set(auth)).body;
-  assert.equal(subs.length, 1);
-  assert.equal(subs[0].email, "test@example.com");
+  assert.equal(subs.length, 2); // the gift-card test above + the parallel-redemption winner
+  assert.equal(subs.find((x) => x.reference === reference).email, "test@example.com");
   assert.equal((await request(app).patch(`/api/admin/subscriptions/${reference}`).set(auth).send({ status: "active" })).body.status, "active");
 
   const recipe = { slug: "lentil-soup", title: "Red Lentil Soup", plan: "veggie", time: 30, tags: ["Vegan"], image: "images/page4-1.jpg" };
@@ -98,5 +124,5 @@ test("admin: auth, subscriptions and catalogue CRUD", async () => {
   assert.equal((await request(app).delete("/api/admin/recipes/lentil-soup").set(auth)).status, 204);
 
   assert.equal((await request(app).put("/api/admin/plans/fit").set(auth).send({ pricePerServing: 8.49 })).body.pricePerServing, 8.49);
-  assert.equal((await request(app).get("/api/admin/gift-cards").set(auth)).body.length, 1);
+  assert.equal((await request(app).get("/api/admin/gift-cards").set(auth)).body.length, 2);
 });
