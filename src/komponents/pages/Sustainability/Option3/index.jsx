@@ -4,6 +4,7 @@ import SustainabilityPage from '../SustainabilityPage';
 const Option3 = () => (
   <SustainabilityPage
     title="Less food waste"
+    description="Small kitchen habits that help you throw away less food at home: a sustainability tips page from a HelloFresh practice clone built with React."
     intro="Small kitchen habits that help you throw away less food."
     points={[
       { title: 'Pre-portioned ingredients', text: 'When each recipe comes with the amount it needs, fewer half-used packs are left in the fridge.' },

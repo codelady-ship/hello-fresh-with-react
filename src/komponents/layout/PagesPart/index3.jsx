@@ -27,7 +27,7 @@ const PagesP3 = () => {
             <li key={i} className="py-2 text-lg text-gray-600">✓ {i}</li>
           ))}
         </ul>
-        <Link to="/OurPlans" className="rounded bg-green-600 px-8 py-2 font-semibold text-white transition duration-300 hover:bg-green-700">
+        <Link to="/OurPlans" className="inline-flex min-h-11 items-center rounded bg-green-600 px-8 py-2 font-semibold text-white transition duration-300 hover:bg-green-700">
           View our plans
         </Link>
       </div>

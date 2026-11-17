@@ -27,10 +27,10 @@ const Footer = () => (
       {columns.map((col) => (
         <div key={col.title}>
           <h2 className="mb-2 font-bold text-gray-700">{col.title}</h2>
-          <ul className="space-y-1">
+          <ul>
             {col.links.map((l) => (
               <li key={l.to}>
-                <Link to={l.to} className="text-green-700 hover:underline">{l.label}</Link>
+                <Link to={l.to} className="inline-flex min-h-11 items-center text-green-700 hover:underline">{l.label}</Link>
               </li>
             ))}
           </ul>
@@ -40,15 +40,15 @@ const Footer = () => (
         <h2 className="mb-2 font-bold text-gray-700">Source code</h2>
         <a
           href="https://github.com/codelady-ship/hello-fresh-with-react"
-          className="text-green-700 hover:underline"
+          className="inline-flex min-h-11 items-center text-green-700 hover:underline"
           target="_blank"
           rel="noreferrer"
         >
-          View on GitHub
+          View on GitHub<span className="sr-only"> (opens in a new tab)</span>
         </a>
         <a
           href="https://github.com/codelady-ship"
-          className="mt-3 flex w-fit items-center gap-2 font-semibold text-gray-700 hover:text-green-700 hover:underline"
+          className="flex min-h-11 w-fit items-center gap-2 font-semibold text-gray-700 hover:text-green-700 hover:underline"
           target="_blank"
           rel="noreferrer"
           aria-label="codelady-ship on GitHub (opens in a new tab)"

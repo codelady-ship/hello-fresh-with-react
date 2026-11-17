@@ -4,6 +4,7 @@ import SustainabilityPage from '../SustainabilityPage';
 const Option1 = () => (
   <SustainabilityPage
     title="Packaging & recycling"
+    description="How to sort a meal-kit box, ingredient bags and ice packs for recycling: tips from a HelloFresh practice clone built with React and Tailwind CSS."
     intro="How to sort the box, the bags and the cooling packs after a delivery."
     points={[
       { title: 'Cardboard box', text: 'Flatten the box and put it in paper recycling. Remove any tape first if your local rules ask for it.' },

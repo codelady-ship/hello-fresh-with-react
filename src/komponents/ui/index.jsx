@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 // Green header band used by every inner page (one h1 per page).
@@ -23,8 +23,8 @@ export const ButtonLink = ({ to, children, variant = 'solid' }) => (
     to={to}
     className={
       variant === 'solid'
-        ? 'inline-block rounded bg-green-600 px-8 py-2 font-semibold text-white transition duration-300 hover:bg-green-700'
-        : 'inline-block rounded border border-green-600 px-8 py-2 font-semibold text-green-700 transition duration-300 hover:bg-green-600 hover:text-white'
+        ? 'inline-flex min-h-11 items-center justify-center rounded bg-green-600 px-8 py-2 font-semibold text-white transition duration-300 hover:bg-green-700'
+        : 'inline-flex min-h-11 items-center justify-center rounded border border-green-600 px-8 py-2 font-semibold text-green-700 transition duration-300 hover:bg-green-600 hover:text-white'
     }
   >
     {children}
@@ -36,3 +36,27 @@ export const PracticeNote = () => (
     This page is part of a practice clone built for learning React. Plans, prices and gift cards shown here are examples only.
   </p>
 );
+
+// Confirmation panel shown after a demo form is completed. Focus moves to it so
+// keyboard and screen-reader users get the result; it stays until "Start over".
+export const DemoConfirmation = ({ title, children, onReset, resetLabel = 'Start over' }) => {
+  const ref = useRef(null);
+  useEffect(() => {
+    ref.current?.focus();
+  }, []);
+  return (
+    <div ref={ref} tabIndex={-1} role="status" className="rounded-lg border-2 border-green-600 bg-white p-6 shadow-sm focus:outline-none">
+      <p className="mb-2 inline-block rounded bg-amber-100 px-2 py-0.5 text-sm font-bold uppercase tracking-wide text-amber-800">Demo only</p>
+      <h3 className="text-xl font-bold text-gray-700">{title}</h3>
+      <div className="mt-3 space-y-2 text-gray-600">{children}</div>
+      <p className="mt-4 text-sm text-gray-500">This is a practice project: nothing was sent, ordered or charged.</p>
+      <button
+        type="button"
+        onClick={onReset}
+        className="mt-4 inline-flex min-h-11 items-center rounded border border-green-600 px-6 py-2 font-semibold text-green-700 transition hover:bg-green-600 hover:text-white"
+      >
+        {resetLabel}
+      </button>
+    </div>
+  );
+};

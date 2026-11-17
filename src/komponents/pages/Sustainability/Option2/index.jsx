@@ -4,6 +4,7 @@ import SustainabilityPage from '../SustainabilityPage';
 const Option2 = () => (
   <SustainabilityPage
     title="Seasonal ingredients"
+    description="Why cooking with seasonal ingredients means fresher food and more variety through the year: a sustainability page from a HelloFresh practice clone."
     intro="Cooking with the seasons means fresher food and more variety through the year."
     points={[
       { title: 'Fresher taste', text: 'Fruit and vegetables picked in season usually spend less time travelling before they reach your kitchen.' },
