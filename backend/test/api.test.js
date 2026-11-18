@@ -126,3 +126,29 @@ test("admin: auth, subscriptions and catalogue CRUD", async () => {
   assert.equal((await request(app).put("/api/admin/plans/fit").set(auth).send({ pricePerServing: 8.49 })).body.pricePerServing, 8.49);
   assert.equal((await request(app).get("/api/admin/gift-cards").set(auth)).body.length, 2);
 });
+
+test("demo admin: seeded, can read, every write is blocked with 403", async () => {
+  const bad = await request(app).post("/api/auth/login").send({ email: "demo@hellofresh-clone.az", password: "wrong" });
+  assert.equal(bad.status, 401);
+  const login = await request(app).post("/api/auth/login").send({ email: "demo@hellofresh-clone.az", password: "demo1234" });
+  assert.equal(login.status, 200);
+  assert.equal(login.body.role, "demo");
+  const auth = { Authorization: `Bearer ${login.body.token}` };
+  for (const path of ["plans", "recipes", "subscriptions", "gift-cards"]) {
+    assert.equal((await request(app).get(`/api/admin/${path}`).set(auth)).status, 200, path);
+  }
+  const writes = [
+    request(app).post("/api/admin/plans").set(auth).send({ slug: "keto", title: "Keto", image: "x.jpg", pricePerServing: 9 }),
+    request(app).put("/api/admin/plans/fit").set(auth).send({ pricePerServing: 1 }),
+    request(app).delete("/api/admin/recipes/crunchy-carrot-lettuce-wraps").set(auth),
+    request(app).patch("/api/admin/subscriptions/HF-000000").set(auth).send({ status: "cancelled" }),
+  ];
+  for (const res of await Promise.all(writes)) {
+    assert.equal(res.status, 403);
+    assert.match(res.body.error, /read-only/);
+  }
+  const plans = (await request(app).get("/api/plans")).body;
+  assert.notEqual(plans.find((p) => p.id === "fit").pricePerServing, 1);
+  const real = await request(app).post("/api/auth/login").send({ email: "admin@test.local", password: "test-password" });
+  assert.equal(real.body.role, "admin");
+});
