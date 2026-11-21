@@ -53,12 +53,20 @@ Free photos from [Unsplash](https://unsplash.com), used under the [Unsplash Lice
 | POST | `/api/subscriptions` | public (rate limited) | `{ plan, people, meals, name, email, giftCode? }` → `201 { reference, weeklyTotal, giftApplied, firstBoxTotal, ... }` |
 | POST | `/api/gift-cards` | public (rate limited) | `{ amount: 25|50|75|100, to, from, message }` → `201 { code, amount }` |
 | GET | `/api/gift-cards/:code` | public (rate limited) | Amount and remaining balance |
-| POST | `/api/auth/login` | public (rate limited) | `{ email, password }` → `{ token }` |
+| POST | `/api/auth/login` | public (rate limited) | `{ email, password }` → `{ token, role }` |
 | GET / POST / PUT / DELETE | `/api/admin/plans[/:slug]`, `/api/admin/recipes[/:slug]` | admin | Manage the catalogue |
 | GET / PATCH | `/api/admin/subscriptions[/:reference]` | admin | List subscriptions, change status |
 | GET | `/api/admin/gift-cards` | admin | List gift cards |
 
 Admin calls need `Authorization: Bearer <token>`. `src/data/site.js` is both the seed for the database and the offline copy for the frontend.
+
+### Admin page and public demo login
+
+The frontend has a small admin page at [`#/admin`](https://codelady-ship.github.io/hello-fresh-with-react/#/admin) (login, the admin lists and their actions).
+
+- **Demo admin** button / public demo login `demo@hellofresh-clone.az` / `demo1234`: a read-only role. The API lets it read every admin list, but for this role subscriptions and gift cards come back masked (`backend/src/lib/mask.js`: code `GIFT-••••••4D`, so it cannot be redeemed; names `R*** C***`; email `r***@g***.test`; gift message hidden), and it answers every write with `403 "Demo admin is read-only: changes are not saved."`, which the page shows as a toast. The account is created by the seed (`npm run seed`, and the seed on start); `DEMO_ADMIN_ENABLED=false` removes it. The real admin (`ADMIN_EMAIL` / `ADMIN_PASSWORD`) keeps full rights.
+- **No API?** When the API is not configured or does not answer, "Demo admin" (or the demo login typed into the form) opens an in-browser sandbox built from `src/data/site.js`: changes stay in this tab only (sessionStorage, or memory when storage is blocked) under a "Demo mode — changes are not saved" note.
+- Login uses a Bearer token (no cookies), so the page also works inside an iframe (e.g. a portfolio); GitHub Pages sends no frame-blocking headers.
 
 ## Run locally
 

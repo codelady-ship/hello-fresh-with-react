@@ -1,4 +1,5 @@
-// Fills plans and recipes from src/data/site.js (the same file the frontend bundles as its offline copy).
+// Fills plans and recipes from src/data/site.js (the same file the frontend bundles as its offline copy)
+// and creates/refreshes the public read-only demo admin (see lib/demoAdmin.js).
 // Usage: npm run seed            -> inserts only into empty collections
 //        npm run seed -- --reset -> replaces plans and recipes (subscriptions and gift cards are kept)
 const path = require("path");
@@ -7,6 +8,7 @@ const mongoose = require("mongoose");
 const config = require("./lib/config");
 const { connect } = require("./lib/db");
 const { Plan, Recipe } = require("./models");
+const { seedDemoAdmin } = require("./lib/demoAdmin");
 
 const SITE = path.join(__dirname, "..", "..", "src", "data", "site.js");
 const slugify = (s) => s.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -25,6 +27,7 @@ async function seed({ reset = false } = {}) {
     await Recipe.insertMany(recipes.map(({ id, ...r }, i) => ({ ...r, slug: slugify(r.title), order: i })));
     out.recipes = recipes.length;
   }
+  out.demoAdmin = await seedDemoAdmin();
   return out;
 }
 
