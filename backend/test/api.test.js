@@ -152,3 +152,91 @@ test("demo admin: seeded, can read, every write is blocked with 403", async () =
   const real = await request(app).post("/api/auth/login").send({ email: "admin@test.local", password: "test-password" });
   assert.equal(real.body.role, "admin");
 });
+
+test("demo admin: no usable gift-card code and no real name / email in any admin GET", async () => {
+  // Real visitors, through the public routes.
+  const gift = { amount: 100, to: "Gulnara Huseynova", from: "Tofiq Bayramli", message: "Private note for Gulnara" };
+  const card = (await request(app).post("/api/gift-cards").send(gift)).body;
+  assert.match(card.code, /^GIFT-[0-9A-F]{8}$/);
+  const spent = (await request(app).post("/api/gift-cards").send({ amount: 75, to: "Sevda Quliyeva", from: "Anar Quliyev" })).body;
+  const customer = { name: "Real Customer", email: "real.customer@privatemail.test" };
+  // 2 x 2 x 7.49 = 29.96, so the 75 card keeps a balance: its code is still worth money.
+  const sub = await request(app).post("/api/subscriptions").send({ plan: "veggie", people: 2, meals: 2, ...customer, giftCode: spent.code });
+  assert.equal(sub.status, 201, JSON.stringify(sub.body));
+
+  const demoLogin = await request(app).post("/api/auth/login").send({ email: "demo@hellofresh-clone.az", password: "demo1234" });
+  const demo = { Authorization: `Bearer ${demoLogin.body.token}` };
+  const adminLogin = await request(app).post("/api/auth/login").send({ email: "admin@test.local", password: "test-password" });
+  const admin = { Authorization: `Bearer ${adminLogin.body.token}` };
+
+  const realCards = (await request(app).get("/api/admin/gift-cards").set(admin)).body;
+  const realSubs = (await request(app).get("/api/admin/subscriptions").set(admin)).body;
+  // The real admin still gets everything as stored.
+  assert.ok(realCards.some((c) => c.code === card.code && c.to === gift.to && c.from === gift.from && c.message === gift.message && c.balance === 100));
+  assert.ok(realSubs.some((s) => s.name === customer.name && s.email === customer.email && s.giftCode === spent.code));
+
+  // Every code, name, email and message stored so far, by every test in this file.
+  const secrets = new Set();
+  for (const c of realCards) [c.code, c.code.slice(5), c.to, c.from, c.message].forEach((v) => v && secrets.add(v));
+  for (const s of realSubs) [s.name, s.email, s.giftCode].forEach((v) => v && secrets.add(v));
+  for (const v of ["real.customer", "Gulnara", "Huseynova", "Tofiq", "Bayramli", "Private note", "privatemail", "Sevda", "Quliyev"]) secrets.add(v);
+  assert.ok(secrets.size >= 20);
+
+  const seen = {};
+  for (const path of ["plans", "recipes", "subscriptions", "subscriptions?status=pending", "gift-cards"]) {
+    const res = await request(app).get(`/api/admin/${path}`).set(demo);
+    assert.equal(res.status, 200, path);
+    seen[path] = res.body;
+    const text = JSON.stringify(res.body).toLowerCase();
+    for (const s of secrets) assert.ok(!text.includes(String(s).toLowerCase()), `/api/admin/${path} leaks "${s}" to the demo admin`);
+    assert.doesNotMatch(JSON.stringify(res.body), /GIFT-[0-9A-F]{3,}/i, `/api/admin/${path} shows gift-code characters in a row`);
+  }
+
+  const shown = seen["gift-cards"].find((c) => c.id === realCards.find((r) => r.code === card.code).id);
+  assert.deepEqual(
+    { code: shown.code, to: shown.to, from: shown.from, message: shown.message, amount: shown.amount, balance: shown.balance, masked: shown.masked },
+    { code: `GIFT-••••••${card.code.slice(-2)}`, to: "G*** H***", from: "T*** B***", message: "(hidden in demo)", amount: 100, balance: 100, masked: true }
+  );
+  const shownSub = seen.subscriptions.find((s) => s.reference === sub.body.reference);
+  assert.equal(shownSub.name, "R*** C***");
+  assert.equal(shownSub.email, "r***@p***.test");
+  assert.equal(shownSub.giftCode, `GIFT-••••••${spent.code.slice(-2)}`);
+  assert.ok(seen.subscriptions.every((s) => s.masked === true) && seen["gift-cards"].every((c) => c.masked === true));
+
+  // Nothing the demo admin was given can be redeemed or looked up.
+  const candidates = new Set();
+  const collect = (v) => {
+    if (typeof v === "string") candidates.add(v);
+    else if (v && typeof v === "object") Object.values(v).forEach(collect);
+  };
+  collect(seen["gift-cards"]);
+  collect(seen.subscriptions);
+  const body = (giftCode) => ({ plan: "veggie", people: 2, meals: 2, name: "Demo Visitor", email: "demo.visitor@example.com", giftCode });
+  for (const value of candidates) {
+    if (!value.trim() || value.length > 20) continue; // empty = no gift code; over 20 = longer than the schema accepts
+    const res = await request(app).post("/api/subscriptions").send(body(value));
+    assert.equal(res.status, 400, `"${value}" from the demo admin was accepted as a gift code`);
+    assert.equal(res.body.details[0].field, "giftCode");
+  }
+  const after = (await request(app).get("/api/admin/gift-cards").set(admin)).body;
+  assert.deepEqual(after.map((c) => [c.code, c.balance]), realCards.map((c) => [c.code, c.balance]));
+  assert.equal((await request(app).get("/api/admin/subscriptions").set(admin)).body.length, realSubs.length);
+  // The same request with the real code works, so the refusals above were about the masked value.
+  const ok = await request(app).post("/api/subscriptions").send(body(card.code));
+  assert.equal(ok.status, 201);
+  assert.equal(ok.body.giftApplied, 29.96);
+});
+
+test("mask helpers and role check", async () => {
+  const { maskName, maskEmail, maskGiftCode } = require("../src/lib/mask");
+  assert.equal(maskName("  real   customer "), "R*** C***");
+  assert.equal(maskName(""), "***");
+  assert.equal(maskEmail("Real.Customer@Gmail.test"), "r***@g***.test");
+  assert.equal(maskEmail("nonsense"), "***");
+  assert.equal(maskGiftCode("GIFT-1A2B3C4D"), "GIFT-••••••4D");
+  assert.equal(maskGiftCode(""), "");
+  // A token signed with another algorithm is refused.
+  const jwt = require("jsonwebtoken");
+  const hs512 = jwt.sign({ sub: "x", role: "admin" }, process.env.JWT_SECRET, { algorithm: "HS512" });
+  assert.equal((await request(app).get("/api/admin/gift-cards").set("Authorization", `Bearer ${hs512}`)).status, 401);
+});

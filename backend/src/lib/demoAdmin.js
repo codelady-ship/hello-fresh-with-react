@@ -1,6 +1,7 @@
 // Public, read-only "demo admin" account for the portfolio.
 // It lives in the AdminUser collection and is created by seed.js (and the seed on start).
-// Its JWT carries role "demo": requireAdmin lets it read every admin list but answers
+// Its JWT carries role "demo": requireAdmin lets it read the admin lists (customer data and
+// gift-card codes masked, see mask.js) but answers
 // every write with 403, so it can never change real data. The password is public by design.
 const crypto = require("crypto");
 const mongoose = require("mongoose");

@@ -61,7 +61,10 @@ const Login = ({ onLogin }) => {
     try {
       onLogin(await apiLogin(email.trim(), password));
     } catch (err) {
-      setError(err.offline ? 'The API is offline right now. Use “Demo admin” to try the panel.' : err.message);
+      // The printed demo login must also work with no API: open the sandbox, as the button does.
+      const typedDemo = email.trim().toLowerCase() === DEMO_LOGIN.email && password === DEMO_LOGIN.password;
+      if (typedDemo && (err.offline || err.status >= 500 || err.status === 401)) onLogin({ mode: 'sandbox', role: 'demo' });
+      else setError(err.offline ? 'The API is offline right now. Use “Demo admin” to try the panel.' : err.message);
     } finally {
       setBusy(false);
     }
@@ -224,7 +227,7 @@ const Panel = ({ session, onToast, onLogout }) => {
           ) : (
             session.role === 'demo' && (
               <p className="mb-4 rounded border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-                <strong>Read-only demo admin — changes are not saved.</strong> You can browse everything; edits are blocked by the server.
+                <strong>Read-only demo admin — changes are not saved.</strong> Edits are blocked by the server, gift-card codes are masked and customers’ names and emails are hidden.
               </p>
             )
           )}

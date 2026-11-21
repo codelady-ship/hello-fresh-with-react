@@ -3,6 +3,7 @@ const express = require("express");
 const { z } = require("zod");
 const { createBaseApp, publicWriteLimiter } = require("./lib/base");
 const { requireAdmin } = require("./lib/auth");
+const { maskGiftCard, maskSubscription } = require("./lib/mask");
 const { HttpError, validate, notFound, errorHandler } = require("./lib/errors");
 const { PEOPLE, MEALS, GIFT_AMOUNTS, Plan, Recipe, GiftCard, Subscription } = require("./models");
 
@@ -186,7 +187,11 @@ function createApp() {
     });
   });
 
-  /* ----- Admin (JWT) ----- */
+  /* ----- Admin (JWT) -----
+     Subscriptions and gift cards hold customers' names, emails and spendable codes. The demo
+     admin's password is public, so only the real admin gets them as stored; every other role
+     gets the masked shapes from lib/mask.js (no usable code, no real name or email). */
+  const fullAccess = (req) => req.admin && req.admin.role === "admin";
   crud(api, "plans", Plan, planSchema);
   crud(api, "recipes", Recipe, recipeSchema, async (body) => {
     if (body.plan && !(await Plan.exists({ slug: body.plan }))) throw fail("plan", "Unknown plan");
@@ -194,7 +199,8 @@ function createApp() {
 
   api.get("/admin/subscriptions", requireAdmin, async (req, res) => {
     const filter = req.query.status ? { status: String(req.query.status) } : {};
-    res.json(await Subscription.find(filter).sort({ createdAt: -1 }).limit(200));
+    const subs = await Subscription.find(filter).sort({ createdAt: -1 }).limit(200);
+    res.json(fullAccess(req) ? subs : subs.map(maskSubscription));
   });
 
   api.patch("/admin/subscriptions/:reference", requireAdmin, validate(statusSchema), async (req, res) => {
@@ -203,8 +209,9 @@ function createApp() {
     res.json(sub);
   });
 
-  api.get("/admin/gift-cards", requireAdmin, async (_req, res) => {
-    res.json(await GiftCard.find().sort({ createdAt: -1 }).limit(200));
+  api.get("/admin/gift-cards", requireAdmin, async (req, res) => {
+    const cards = await GiftCard.find().sort({ createdAt: -1 }).limit(200);
+    res.json(fullAccess(req) ? cards : cards.map(maskGiftCard));
   });
 
   app.use("/api", api);

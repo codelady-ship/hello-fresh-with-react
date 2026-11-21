@@ -10,7 +10,7 @@ const safeEqual = (a, b) => crypto.timingSafeEqual(sha(a), sha(b));
 const READ_METHODS = ["GET", "HEAD", "OPTIONS"];
 const DEMO_READ_ONLY = "Demo admin is read-only: changes are not saved.";
 
-const sign = (sub, role) => ({ token: jwt.sign({ sub, role }, config.jwtSecret, { expiresIn: "8h" }), role });
+const sign = (sub, role) => ({ token: jwt.sign({ sub, role }, config.jwtSecret, { algorithm: "HS256", expiresIn: "8h" }), role });
 
 // The real admin comes from the ADMIN_EMAIL / ADMIN_PASSWORD env vars (full rights).
 // The public demo admin comes from the AdminUser collection (seed.js) and is read-only.
@@ -33,12 +33,12 @@ function requireAdmin(req, _res, next) {
   if (type !== "Bearer" || !token || !config.jwtSecret) return next(new HttpError(401, "Admin token required"));
   let payload;
   try {
-    payload = jwt.verify(token, config.jwtSecret);
+    payload = jwt.verify(token, config.jwtSecret, { algorithms: ["HS256"] });
     if (payload.role !== "admin" && payload.role !== DEMO_ROLE) throw new Error("role");
   } catch {
     return next(new HttpError(401, "Invalid or expired token"));
   }
-  // The demo role may look at everything but never write.
+  // The demo role may look (customer data masked in app.js) but never write.
   if (payload.role === DEMO_ROLE && !READ_METHODS.includes(req.method)) return next(new HttpError(403, DEMO_READ_ONLY));
   req.admin = payload;
   next();
